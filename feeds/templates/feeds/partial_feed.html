@@ -1,0 +1,11 @@
+
+<li feed-id="{{ feed.pk }}" csrf="{{ csrf_token }}">
+    <div class="feed-container">
+        <div class="post">
+            {% if feed.user == user %}
+                <span class="glyphicon glyphicon-remove remove-feed" title="Click to remove this feed"></span>
+            {% endif %}
+            <p>{{ feed.linkfy_post|safe }}</p>
+        </div>
+    </div>
+</li>

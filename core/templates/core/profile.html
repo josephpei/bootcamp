@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+    <link href="{% static 'css/feeds.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{{ page_user.username }}{% endblock title %}
+
+{% block main %}
+    <div class="page-header">
+        <h1>{{ page_user.profile.get_screen_name }}</h1>
+    </div>
+    <div class="profile">
+        <div class="row">
+            <div class="col-md-3 user-profile">
+                <ul>
+                    {% if page_user.profile.job_title %}
+                        <li><span class="glyphicon glyphicon-briefcase"></span> {{ page_user.profile.job_title }}</li>
+                    {% endif %}
+                    {% if page_user.profile.location %}
+                        <li><span class="glyphicon glyphicon-map-marker"></span> {{ page_user.profile.location }}</li>
+                    {% endif %}
+                    {% if page_user.profile.url %}
+                        <li><span class="glyphicon glyphicon-globe"></span> <a href="{{ page_user.profile.get_url }}"
+                                                                               target="_blank">{{ page_user.profile.get_url }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <h4>Last Feeds by {{ page_user.profile.get_screen_name }}</h4>
+                <ul class="stream">
+                    {% for feed in feeds %}
+                        <li feed-id="{{ feed.pk }}" csrf="{{ csrf_token }}">
+                            <div class="feed-container">
+                                <div class="post">
+                                    {% if feed.user == user %}
+                                        <span class="glyphicon glyphicon-remove remove-feed" title="Click to remove this feed"></span>
+                                    {% endif %}
+                                    <p>{{ feed.post|safe }}</p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Questions{% endblock %}
+
+{% block head %}
+    <link href="{% static 'css/questions.css' %}" rel="stylesheet">
+    <script src="{% static 'js/questions.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="page-header">
+        <a href="{% url 'ask' %}" class="btn btn-primary pull-right">
+            <span class="glyphicon glyphicon-bullhorn"></span>Ask Question
+        </a>
+        <h1>Questions</h1>
+    </div>
+    <div class="questions">
+        <ul class="nav nav-tabs" style="margin-bottom: 1.4em">
+            <li {% if active == 'unanswered' %} class="active"{% endif %}><a href="{% url 'unanswered' %}">Unanswered</a></li>
+            <li {% if active == 'answered' %} class="active"{% endif %}><a href="{% url 'answered' %}">Answered</a></li>
+            <li {% if active == 'all' %} class="active"{% endif %}><a href="{% url 'all' %}">All Questions</a></li>
+        </ul>
+        {% for question in questions %}
+            {% include 'questions/partial_question.html' with question=question %}
+            {% empty %}
+            <h4 class="no-data">No question to display</h4>
+        {% endfor %}
+        {% include 'paginator.html' with paginator=questions %}
+    </div>
+{% endblock %}
